@@ -27,15 +27,19 @@ print("Visualize the image")
 #plt.imshow(training_images[index])
 
 print("Normalize the pixel values of the train and test images")
+training_images  = 255.0 - training_images
+test_images = 255.0 - test_images
+
 training_images  = training_images / 255.0
 test_images = test_images / 255.0
+runtime = datetime.datetime.now()
 
 nodes_layer_1 = 128
 nodes_layer_2 = None
 flattener = tf.keras.layers.Flatten()
 #flattener = None
 print(f"Build the classification model with nodes {nodes_layer_1} and with {flattener} and extra layer of {nodes_layer_2}")
-model = tf.keras.models.Sequential([flattener,
+model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
           tf.keras.layers.Dense(nodes_layer_1, activation=tf.nn.relu), 
             tf.keras.layers.Dense(10, activation=tf.nn.softmax)])
 
@@ -48,8 +52,8 @@ model.compile(optimizer = optimizer,
               loss = 'sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+log_dir = "logs/fit/" + runtime.strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1, write_images=True),
 class myCallback(tf.keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs={}):
     if(logs.get('accuracy') >= 0.99): # Experiment with changing this value
@@ -57,9 +61,13 @@ class myCallback(tf.keras.callbacks.Callback):
       self.model.stop_training = True
 
 callbacks = myCallback()
-epochs = 10
+epochs = 30
 print(f"Fitting the classification model with epochos {epochs} ------------------------------------- ")
 history = model.fit(training_images, training_labels, epochs = epochs, callbacks=[tensorboard_callback])
+
+#Saving the model
+model.save('digit-model2.h5')
+
 
 print("Evaluate the model on unseen data --------------------------------------- ")
 model.evaluate(test_images, test_labels)
@@ -86,7 +94,16 @@ print(test_labels[tst_idx])
 
 print("Visualize the image")
 #plt.imshow(test_images[tst_idx])
+# Sets up a timestamped log directory.
+logdir = "logs/train_data/" + runtime.strftime("%Y%m%d-%H%M%S")
+# Creates a file writer for the log directory.
+file_writer = tf.summary.create_file_writer(logdir)
 
+# Using the file writer, log the reshaped image.
+with file_writer.as_default():
+  # Don't forget to reshape.
+  images = np.reshape(training_images[0:25], (-1, 28, 28, 1))
+  tf.summary.image("25 training data examples", images, max_outputs=25, step=0)
 
 def plot_graphs(history, metric):
     plt.plot(history.history[metric])
