@@ -19,10 +19,10 @@ run: tensorboard --logdir logs/fit
 Create a test image using the iOS App Paint 98 as shown below.\
 The generated 28 x 28 picture can then be classified with tensorflow-digit-ocr-predict.py path_to_image
 <div align="left">
-  <img src="./doc/IMG_0357.png"  width="10%" height="10%"/>
-  <img src="./doc/IMG_0358.png"  width="10%" height="10%"/>
-  <img src="./doc/IMG_0359.png"  width="10%" height="10%"/>
-  <img src="./doc/IMG_0360.png"  width="10%" height="10%"/>
+  <img src="./doc/IMG_0357.PNG"  width="10%" height="10%"/>
+  <img src="./doc/IMG_0358.PNG"  width="10%" height="10%"/>
+  <img src="./doc/IMG_0359.PNG"  width="10%" height="10%"/>
+  <img src="./doc/IMG_0360.PNG"  width="10%" height="10%"/>
 </div>
 
 Output should look as follows:\
