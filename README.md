@@ -15,6 +15,11 @@ run: tensorboard --logdir logs/fit
   <img src="./doc/tensorboard.png"  width="10%" height="10%"/>
 </div>
 
+# Architecture tensorflow digit ocr network:
+<div align="left">
+  <img src="./doc/model_plot.png"  width="10%" height="10%"/>
+</div>
+
 # Test with own image
 Create a test image using the iOS App Paint 98 as shown below.\
 The generated 28 x 28 picture can then be classified with tensorflow-digit-ocr-predict.py path_to_image
